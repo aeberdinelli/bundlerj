@@ -8,7 +8,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/aeberdinelli/js-bundler.git"
+		"url": "https://github.com/aeberdinelli/bundlerj.git"
 	},
 	"keywords": [],
 	"author": "",
