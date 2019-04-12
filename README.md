@@ -21,8 +21,11 @@ const options = {
 	 * You can add blacklist rules which will be translated into regex to ignore certain files
 	 */
 	"blacklist": [
-		"^(.*)angular-(.*)$", // If you have angular libs, you can ignore those from your packed app
-		"^(.*)\\.(html|xml)$" // Let's say you want to ignore all html or xml files
+		// If you have angular libs, you can ignore those from your packed app
+		"^(.*)angular-(.*)$", 
+		
+		// Let's say you want to ignore all html or xml files
+		"^(.*)\\.(html|xml)$" 
 	],
 
 	/**
