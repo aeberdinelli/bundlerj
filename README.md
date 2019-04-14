@@ -46,6 +46,12 @@ const options = {
 }
 ```
 
+## Install
+Just run:
+```
+npm install --save bundlerj
+```
+
 ## Usage
 Once you have your settings ready, you can just call the library:
 
