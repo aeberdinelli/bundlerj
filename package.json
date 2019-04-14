@@ -1,6 +1,6 @@
 {
 	"name": "bundlerj",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "",
 	"main": "index.js",
 	"scripts": {
@@ -10,9 +10,9 @@
 		"type": "git",
 		"url": "https://github.com/aeberdinelli/bundlerj.git"
 	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
+	"keywords": ["es6","bundle","minify"],
+	"author": "Alan Berdinelli",
+	"license": "MIT",
 	"dependencies": {
 		"chardet": "^0.7.0"
 	}

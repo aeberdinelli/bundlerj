@@ -47,7 +47,7 @@ const append = (stream, content) => {
 	stream.write(content);
 };
 
-export default function(config) {
+module.exports = function(config) {
 	let bundleFile = path.resolve(config.output || path.join(__dirname, 'bundle.js'));
 	let bundled = 0;
 	let input = config.files;
