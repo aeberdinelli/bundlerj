@@ -90,7 +90,7 @@ module.exports = function(config) {
 
 		append(
 			stream,
-			`/** begin file: ${file} **/`
+			`/** begin file: ${file} **/\n`
 		);
 
 		if (config.isolate) {
