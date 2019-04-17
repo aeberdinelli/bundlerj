@@ -18,7 +18,7 @@ const DEFAULT_CHARSET = 'UTF-8';
  * @param {String} folder Path
  * @return {Array} files
  */
-const processFolder = (folder, blacklist = null) => {
+const processFolder = (folder, blacklist = null, sort = false) => {
 	let files = [];
 
 	fs.readdirSync(folder).forEach(route => {
@@ -34,7 +34,7 @@ const processFolder = (folder, blacklist = null) => {
 		}
 	});
 	
-	return files.sort();
+	return (sort) ? files.sort() : files;
 }
 
 /**
@@ -47,27 +47,27 @@ const append = (stream, content) => {
 	stream.write(content);
 };
 
-module.exports = function(config) {
+module.exports = function(config, wroteCallback = null, status = console.log) {
 	let bundleFile = path.resolve(config.output || path.join(__dirname, 'bundle.js'));
 	let bundled = 0;
 	let input = config.files;
 
 	// Clear file
 	if (fs.existsSync(bundleFile)) {
-		if (config.debug) {
-			console.log(`Cleaning ${bundleFile}... `);
-		}
-
+		status(`Cleaning ${bundleFile}... `);
 		fs.truncateSync(bundleFile);
+
+		// If we just wanted to clear, stop here
+		if (config.justClear) {
+			return;
+		}
 	}
 
-	if (config.debug) {
-		console.log(`Writing to ${bundleFile}`);
-	}
+	status(`Writing to ${bundleFile}`);
 
 	// If it is a folder, get every file from it
 	if (typeof input === 'string') {
-		input = processFolder(input, config.blacklist || null);
+		input = processFolder(input, config.blacklist || null, !!config.sort);
 	}
 
 	// If is array, process each one of it
@@ -75,7 +75,7 @@ module.exports = function(config) {
 		input = [];
 		
 		config.files.forEach(folder => {
-			input = [...input, ...processFolder(folder, config.blacklist || null)];
+			input = [...input, ...processFolder(folder, config.blacklist || null, !!config.sort)];
 		});
 	}
 
@@ -84,20 +84,19 @@ module.exports = function(config) {
 	input.forEach(file => {
 		bundled++;
 
-		if (config.debug) {
-			console.log(`Adding file ${file} (${bundled}/${input.length})`);
-		}
+		status(`Adding file ${file} (${bundled}/${input.length})`);
 
 		append(
 			stream,
-			`/** begin file: ${file} **/`
+			`/** begin file: ${file} **/\n`
 		);
 
 		if (config.isolate) {
 			append(stream, OPENING_STATEMENT);
 		}
 
-		let encoding = chardet.detectFileSync(file);
+		// Detect charset, unless told otherwise
+		let encoding = (!config.ignoreCharset) ? chardet.detectFileSync(file) : DEFAULT_CHARSET;
 
 		// Non UTF currently unsupported
 		if (encoding.indexOf('UTF') === -1) {
@@ -114,5 +113,9 @@ module.exports = function(config) {
 			stream,
 			`/** end file: ${file} **/\n\n`
 		);
+
+		if (!!wroteCallback) {
+			wroteCallback(bundled, input.length);
+		}
 	});
 }
