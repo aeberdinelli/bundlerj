@@ -3,6 +3,11 @@
 	"version": "1.1.0",
 	"description": "A simplified bundler for your javascript files with CLI tools.",
 	"main": "index.js",
+	"bin": {
+		"bundle": "./bundler.js",
+		"bundler": "./bundler.js",
+		"bundlerj": "./bundler.js"
+	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
@@ -22,6 +27,7 @@
 	"dependencies": {
 		"chalk": "^2.4.2",
 		"chardet": "^0.7.0",
+		"clear": "^0.1.0",
 		"clui": "^0.3.6",
 		"commander": "^2.20.0"
 	}

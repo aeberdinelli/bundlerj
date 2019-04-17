@@ -49,12 +49,44 @@ const options = {
 ## Install
 Just run:
 ```
-npm install --save bundlerj
+npm install --save-dev bundlerj
+```
+
+You can install it globally for using CLI in several proyects too:
+```
+npm install -g bundlerj
 ```
 
 ## Usage
-Once you have your settings ready, you can just call the library:
+### CLI
+Some command line options are available.
 
+```
+Usage: bundler [options] [command]
+
+Options:
+  -V, --version           output the version number
+  -g, --config <file>     Ignores everything else and uses a config file instead
+  -f, --source <folders>  Specify the folder to get the source files from
+  -o, --output <output>   Specify the full path to the output file, including name
+  -i, --isolate           Puts every file content inside an anonymous function
+  -s, --sort              Sort the file paths alphabetically before creating the bundle
+  -p, --progress          Show progress
+  --ignore-charset        Do not try to get the file charset (assumes everything is UTF-8, improves speed)
+  -h, --help              output usage information
+
+Commands:
+  generate                Generates the bundled javascript file
+  clear                   Clears the output file
+  help [cmd]              display help for [cmd]
+```
+
+For example:
+```
+bundle generate --source src/js --output dist/bundle.js --progress
+```
+
+### Using the available method
 ```javascript
 const bundle = require('bundlerj');
 
@@ -64,3 +96,23 @@ const SETTINGS = {
 
 bundle(SETTINGS);
 ```
+
+### Using gulp
+You may setup a gulp task in order to build your bundle every time a file is updated:
+
+```javascript
+const gulp = require('gulp');
+const bundler = require('bundlerj');
+
+gulp.task('bundle-js', function() {
+	bundler({
+		// Settings
+	});
+});
+
+gulp.task('default', ['bundle-js'], function() {
+	gulp.watch('./src/js/**/*.js', ['bundle-js']);
+});
+```
+
+That will watch changes in your `src/js` folder and then run the bundler.
