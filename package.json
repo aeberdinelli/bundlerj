@@ -1,6 +1,6 @@
 {
 	"name": "bundlerj",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"description": "A simplified bundler for your javascript files with CLI tools.",
 	"main": "index.js",
 	"bin": {
