@@ -111,7 +111,7 @@ module.exports = function(config, wroteCallback = null, status = console.log) {
 
 		append(
 			stream,
-			`/** end file: ${file} **/\n\n`
+			`\n/** end file: ${file} **/\n\n`
 		);
 
 		if (!!wroteCallback) {

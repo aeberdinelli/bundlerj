@@ -35,21 +35,26 @@ cli.on('command:generate', () => {
 			}
 
 			clear();
+			
+			let bar = new clui.Progress(process.stdout.columns - 10);
+			console.log(bar.update(current, total).replace(/\|/g, '=').replace(/=([^=\-]*)-/g, '>-'));
 
 			if (current == total) {
-				return utils.log('success', `Created bundle: ${settings.output}`);
+				return utils.log('success', settings.output);
 			}
-
-			let bar = new clui.Progress(process.stdout.columns - 10);
-			console.log(bar.update(current, total) + "\n");
 		}, 
 		function updateStatus(msg) {
 			// If we should not show progress, show everything else
 			if (!settings.progress && msg.startsWith('Adding')) {
 				return;
 			}
-			
-			console.log(msg);
+
+			if (!msg.startsWith('Adding')) {
+				return utils.log('info', msg);
+			}
+
+			let parts = msg.replace('Adding file ', '').replace(/\([0-9]+\/[0-9]+\)/g, '').split(/\/|\\/);
+			utils.log('info', `Processing file ${parts[parts.length - 1].trim()}...`);
 		}
 	);
 });
