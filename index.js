@@ -18,12 +18,16 @@ const DEFAULT_CHARSET = 'UTF-8';
  * @param {String} folder Path
  * @return {Array} files
  */
-const processFolder = (folder, blacklist = null, sort = false) => {
+const processFolder = (folder, bundleFile, blacklist = null, sort = false) => {
 	let files = [];
 
 	fs.readdirSync(folder).forEach(route => {
 		if (fs.lstatSync(path.join(folder, route)).isDirectory()) {
-			processFolder(path.join(folder, route), blacklist).forEach(file => files.push(file));
+			processFolder(path.join(folder, route), bundleFile, blacklist).forEach(file => files.push(file));
+			return;
+		}
+
+		if (path.join(folder, route) == bundleFile) {
 			return;
 		}
 
@@ -67,7 +71,7 @@ module.exports = function(config, wroteCallback = null, status = console.log) {
 
 	// If it is a folder, get every file from it
 	if (typeof input === 'string') {
-		input = processFolder(input, config.blacklist || null, !!config.sort);
+		input = processFolder(input, bundleFile, config.blacklist || null, !!config.sort);
 	}
 
 	// If is array, process each one of it
@@ -75,7 +79,7 @@ module.exports = function(config, wroteCallback = null, status = console.log) {
 		input = [];
 		
 		config.files.forEach(folder => {
-			input = [...input, ...processFolder(folder, config.blacklist || null, !!config.sort)];
+			input = [...input, ...processFolder(folder, bundleFile, config.blacklist || null, !!config.sort)];
 		});
 	}
 

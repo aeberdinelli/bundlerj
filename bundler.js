@@ -31,6 +31,10 @@ cli.on('command:generate', () => {
 		settings, 
 		function processedCallback(current, total) {
 			if (!settings.progress) {
+				if (current == total) {
+					utils.log('success', `Created bundle file ${settings.output}`);
+				}
+
 				return;
 			}
 
@@ -44,8 +48,8 @@ cli.on('command:generate', () => {
 			}
 		}, 
 		function updateStatus(msg) {
-			// If we should not show progress, show everything else
-			if (!settings.progress && msg.startsWith('Adding')) {
+			// If we're showing the progress bar, do not show the info messages
+			if (settings.progress) {
 				return;
 			}
 
